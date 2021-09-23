@@ -15,6 +15,7 @@ void entry(){
 #include "keyboard.h"
 #include "shell.h"
 #include "util.h"
+#include "heap.h"
 
 void kernel(){
 	clear();
