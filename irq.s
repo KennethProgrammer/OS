@@ -21,14 +21,12 @@
 .global irq15
 
 irq0:
-	outb $0x20, $0x20
-	outb $0x20, $0xA0
+	call end
 	iret
 
 irq1:
 	call handler1
-	outb $0x20, $0x20
-	outb $0x20, $0xA0
+	call end
 	iret
 
 irq2:
