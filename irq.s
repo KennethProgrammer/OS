@@ -1,7 +1,6 @@
 .code32
 .extern handler0
 .extern handler1
-.extern end
 
 .global irq0
 .global irq1
@@ -21,66 +20,130 @@
 .global irq15
 
 irq0:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq1:
-	call handler1
-	call end
+	call mul
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq2:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq3:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq4:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq5:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq6:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq7:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq8:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq9:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq10:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq11:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq12:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq13:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq14:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret
 
 irq15:
-	call end
+	push %eax
+	movb $0x20, %al
+	outb %al, $0x20
+	outb %al, $0xA0
+	pop %eax
 	iret

@@ -1,32 +1,20 @@
-#ifndef heap_h
-#define heap_h
+#ifndef kernel_heap
+#define kernel_heap
 
-#include "util.h"
+#include "heap2.h"
 
-#define HBP (0x1+(40*512)+1024)
-#define heapSize (0xffffffff - HBP)
+memBlock_t *first = 0;
 
-typedef struct memoryBlock{
-	size_t length;
-	bool used;
-	struct memoryBlock *next;
-	struct memoryBlock *prev;
-}PACKED memBlock_t;
+void initHeap(){
+	first = (memBlock_t *)21506;
 
-memBlock_t *first;
-
-void initHeap(uint32_t addr, size_t size){
-	first = (memBlock_t *)addr;
-	if (size < sizeof(memBlock_t)){first = 0; return;};
-
-	first->length = size - sizeof(memBlock_t);
+	first->length = (0xb8000 - 21506) - sizeof(memBlock_t);
 	first->used = false;
 	first->next = 0;
 	first->prev = 0;
 };
 
-//Start of malloc
-void *malloc(size_t size){
+void *mem_alloc(size_t size){
 	if (size == 0){return 0;};
 	memBlock_t *result = 0;
 
@@ -49,42 +37,45 @@ void *malloc(size_t size){
 	memBlock_t *newBlock = (void *)result + sizeof(memBlock_t) + size;
 	newBlock->used = false;
 	newBlock->length = result->length - size - sizeof(memBlock_t);
-	newBlock->next = 0;
 	newBlock->prev = result;
+	newBlock->next = result->next;
+	if (newBlock->next != 0){newBlock->next->prev = newBlock;};
 
 	result->length = size;
 	result->used = true;
 	result->next = newBlock;
-	result->prev = 0;
 	return (void *)result + sizeof(memBlock_t);
 };
-//End of malloc
 
-void *merge_next(memBlock_t *current){
-	if (current->next != 0 && !current->next->used){
-
-	 current->length += current->next->length + sizeof(memBlock_t);
-	 current->next = current->next->next;
-
-	 if (current->next != 0){current->next->prev = current;};
-	};
-	return current;
+void initBothHeaps(){
+	initHeap();
+	initHeap2();
 };
 
-void *merge_prev(memBlock_t *current){
-	return merge_next(current->prev);
+void *malloc(size_t size){
+	if (size == 0){return 0;};
+	void *ptr = mem_alloc(size);
+	if (ptr == 0){ptr = mem_alloc2(size);};
+	return ptr;
 };
 
+void *realloc(void *addr, size_t size){
+	char *ADDR = (char *)addr;
+	memBlock_t *ptr_addr = (void *)addr - sizeof(memBlock_t);
+	char *dst = malloc(size);
+	size_t smaller_size = 0;
 
-void free(void *ptr){
-	if (ptr == 0){return;};
+	if (ptr_addr->length < size){smaller_size = ptr_addr->length;}
+	else {smaller_size = size;};
+	for (int i = 0; i < smaller_size; i++){dst[i] = ADDR[i];};
+	free(addr);
+	return (void *)dst;
+};
 
-	memBlock_t *current = (void *)ptr - sizeof(memBlock_t);
-	if (current == 0){return;};
-
-	current->used = false;
-	current = merge_next(current);
-	merge_prev(current);
+int no_of_blocks(){
+	int i = 0;
+	for (memBlock_t *temp = first; temp != 0; temp = temp->next){i++;};
+	return i;
 };
 
 #endif

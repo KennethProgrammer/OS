@@ -26,11 +26,6 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-void end(){
-	outb(0x20, 0x20);
-	outb(0xA0, 0x20);
-};
-
 void exceptions(){
 	print("Exception Ocurred");
 	while(1){};
