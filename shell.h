@@ -44,7 +44,7 @@ void execute_cmd(char *cmd){
 	}
 
 	else if (strcmp(cmd, "info") == 0){
-	 print("Name of the OS: Lunix\n");
+	 print("Name of the OS: KCLI(Kenneth's Command Line Interface)\n");
 	 print("x86 OS 32bit\n");
 	 print("Contains VGA graphics card driver and a Keyboard driver\n");
 	 print("Kernel: Written in the C Programming language\n");
